@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card mt-3">
-        <div class="card-body">
-            <h3>Manage Users</h3>
-        </div>
-    </div>
+
+<users-management-dashboard></users-management-dashboard>
+
 @endsection

@@ -22,6 +22,8 @@ Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::prefix('users')->namespace('Users')->name('users.')->group(function () {
+Route::prefix('users')->namespace('Users')->name('users.')->middleware(['web', 'auth'])->group(function () {
     Route::get('/', [UsersController::class, 'index'])->name('dashboard');
 });
+
+Route::prefix('data')->namespace('Data')->middleware(['web', 'auth'])->group(base_path('routes/web/data.php'));
