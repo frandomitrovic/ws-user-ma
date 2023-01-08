@@ -4,6 +4,9 @@
             <div class="card-body">
                 <h3>Manage Users</h3>
 
+                <Paginator v-if="results !== null" v-bind:results="results" v-on:get-page="getPage"></Paginator>
+                <PaginatorDetails v-if="results !== null" v-bind:results="results"></PaginatorDetails>
+
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -17,7 +20,7 @@
                         <tr v-for="user in results.data">
                             <th>{{ user.name }}</th>
                             <td>{{ user.email }}</td>
-                            <td>{{ user.member_since }}</td>
+                            <td>{{ user.user_since }}</td>
                             <td>
                                 <div class="btn-group">
                                     <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
@@ -26,6 +29,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <Paginator v-if="results !== null" v-bind:results="results" v-on:get-page="getPage" />
             </div>
         </div>
     </div>
@@ -33,7 +37,14 @@
 
 
 <script>
+    import Paginator from '../utilities/pagination/Paginator.vue'
+    import PaginatorDetails from '../utilities/pagination/PaginatorDetails.vue'
+
     export default {
+        components:{
+            Paginator,
+            PaginatorDetails,
+        },  
         mounted() {
             this.getUsers()
         },
@@ -50,7 +61,12 @@
                 axios.get('/data/users', {params: this.params}).then(response => {
                     this.results = response.data.results
                 })
-            }
+            },
+            getPage: function(event) {
+                this.params.page = event
+                window.scrollTo(0, 0, {behavior: "smooth"})
+                this.getUsers()
+            },
         }
     }
 </script>
