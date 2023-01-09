@@ -1,10 +1,14 @@
 <template>
     <div>
-        <div class="card mt-3">
+        <div class="card mt-3" v-if="active.dashboard">
             <div class="card-body">
-                <h3>Manage Users</h3>
+                <h3 class="d-flex justify-content-between">Manage Users <button class="btn btn-outline-success btn-sm float-right" @click="setActive('createUser')"><i class="fas fa-plus"></i> User</button></h3>
 
-                <Paginator v-if="results !== null" v-bind:results="results" v-on:get-page="getPage"></Paginator>
+                <div class="alert-success alert" role="alert" v-if="success_message !== null">
+                    {{ success_message }}
+                </div>
+
+                <Paginator v-if="results !== null" v-bind:results="results" v-on:get-page="getPage" />
                 <PaginatorDetails v-if="results !== null" v-bind:results="results"></PaginatorDetails>
 
                 <table class="table table-hover">
@@ -32,6 +36,7 @@
                 <Paginator v-if="results !== null" v-bind:results="results" v-on:get-page="getPage" />
             </div>
         </div>
+        <CreateUser v-if="active.createUser" v-on:view-dashboard="setActive('dashboard')" v-on:created-user="flashSuccessAndReload($event)" />
     </div>
 </template>
 
@@ -39,11 +44,13 @@
 <script>
     import Paginator from '../utilities/pagination/Paginator.vue'
     import PaginatorDetails from '../utilities/pagination/PaginatorDetails.vue'
+    import CreateUser from './CreateUser.vue'
 
     export default {
         components:{
             Paginator,
             PaginatorDetails,
+            CreateUser,
         },  
         mounted() {
             this.getUsers()
@@ -51,9 +58,14 @@
         data() {
             return {
                 results: null,
+                active: {
+                    dashboard: true,
+                    createUser: false,
+                },
                 params: {
                     page: 1
-                }
+                },
+                success_message: null,
             }
         }, 
         methods: {
@@ -67,6 +79,15 @@
                 window.scrollTo(0, 0, {behavior: "smooth"})
                 this.getUsers()
             },
+            setActive: function(component) {
+                Object.keys(this.active).forEach(key => this.active[key] = false)
+                this.active[component] = true
+            },
+            flashSuccessAndReload: function(event) {
+                this.setActive('dashboard')
+                this.success_message = event
+                this.getUsers()
+            }
         }
     }
 </script>
