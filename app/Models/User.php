@@ -49,6 +49,11 @@ class User extends Authenticatable
         'user_since'
     ];
 
+    protected $dispatchesEvents = [
+        'created' => 'App\Events\Users\CreatedUser',
+        'deleting' => 'App\Events\Users\DeletingUser'
+    ];
+
     public function getUserSinceAttribute()
     {
         return date('F d, Y', strtotime($this->created_at));
