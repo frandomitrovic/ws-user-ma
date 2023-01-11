@@ -31,7 +31,8 @@
                             <td>{{ user.user_since }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                    <div class="button btn btn-secondary btn-sm" title="View User Logs" @click="viewUserLogs(user)"><i class="fas fa-list-alt"></i></div>
+                                    <button class="btn btn-sm btn-warning" title="Edit User" @click="editUser(user)"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-sm btn-danger" @click="deleteUser(user)"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
@@ -42,6 +43,18 @@
             </div>
         </div>
         <CreateUser v-if="active.createUser" v-on:view-dashboard="setActive('dashboard')" v-on:created-user="flashSuccessAndReload" />
+
+        <UserLogs 
+        v-if="user !== null && active.userLogs" 
+        v-bind:user="user" 
+        v-on:view-dashboard="setActive('dashboard')" />
+
+        <EditUser
+        v-if="user !== null && active.editUser"
+        v-bind:user="user"
+        v-on:view-dashboard="setActive('dashboard')"
+        v-on:user-updated="flashSuccessAndReload">
+        </EditUser>
     </div>
 </template>
 
@@ -50,22 +63,29 @@
     import Paginator from '../utilities/pagination/Paginator.vue'
     import PaginatorDetails from '../utilities/pagination/PaginatorDetails.vue'
     import CreateUser from './CreateUser.vue'
+    import UserLogs from './logs/UserLogs.vue'
+    import EditUser from './EditUser.vue'
 
     export default {
         components:{
             Paginator,
             PaginatorDetails,
             CreateUser,
+            UserLogs,
+            EditUser,
         },  
         mounted() {
             this.getUsers()
         },
         data() {
             return {
+                user: null,
                 results: null,
                 active: {
                     dashboard: true,
                     createUser: false,
+                    userLogs:false,
+                    editUser: false,
                 },
                 params: {
                     page: 1
@@ -80,6 +100,10 @@
                     this.results = response.data.results
                 })
             },
+            editUser: function(user) {
+                this.user = user
+                this.setActive('editUser')
+            },
             deleteUser: function(user) {
                 let r = confirm("Are you sure you want to delete " + user.name + " from the system?")
                 if (r) {
@@ -92,6 +116,10 @@
                     })
                 }
             }, 
+            viewUserLogs: function(user) {
+                this.user = user
+                this.setActive('userLogs')
+            },
             getPage: function(event) {
                 this.params.page = event
                 window.scrollTo(0, 0, {behavior: "smooth"})
