@@ -6,31 +6,37 @@
                 
                 <hr>
 
-                <div class="form-group row">
+                <div class="alert alert-warning" role="alert" v-if="errors.length > 0">
+                    <ul>
+                        <li v-for="error in errors">{{ error }}</li>
+                    </ul>
+                </div>
+
+                <div class="form-group row mb-3">
                     <label for="" class="col-3">Name</label>
                     <div class="col-9">
                         <input type="text" class="form-control" v-model="data.name">
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row mb-3">
                     <label class="col-3">Email</label>
                     <div class="col-9">
                         <input type="email" class="form-control" v-model="data.email">
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row mb-3">
                     <label for="" class="col-3">Role</label>
                     <div class="col-9">
-                        <select class="form-control" v-model="data.role">
-                            <option :value="user">User</option>
-                            <option :value="admin">Admin</option>
+                        <select class="form-select" v-model="data.role">
+                            <option :value="'user'">User</option>
+                            <option :value="'admin'">Admin</option>
                         </select>
                     </div>
                 </div>
 
-                <button class="btn-primary btn">Update User</button>
+                <button class="btn-primary btn" @click.prevent="updateUser">Update User</button>
             
             </div>
         </div>
@@ -49,12 +55,34 @@
                     name: '',
                     email: '',
                     role: '',
-                }
+                },
+                errors: [],
+            }
+        },
+        methods: {
+            updateUser: function() {
+                this.errors = []
+                axios.post('/data/users/' + this.user.id, {
+                    _method:'PUT',
+                    name: this.data.name,
+                    email: this.data.email,
+                    role: this.data.role,
+                }).then(response => {
+                    this.$emit('user-updated', response.data.user.name + "'s profile has been updated");
+                }).catch(errors => {
+                    console.dir(errors)
+                    if(errors.response.status === 500) {
+                        this.errors.push("This email address may already be taken. Please try another one.")
+                    }
+                })
+            },
+            assignUserToData: function() {
+                Object.keys(this.data).forEach(key => this.data[key] = this.user[key]);
             }
         },
         watch: {
             user: function() {
-                this.data = this.user
+                this.assignUserToData()
             }
         }
     }
