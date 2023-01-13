@@ -74,6 +74,11 @@
                     if(errors.response.status === 500) {
                         this.errors.push("This email address may already be taken. Please try another one.")
                     }
+                    if(errors.response.status === 422) {
+                        Object.keys(errors.response.data.errors).forEach(key => {
+                            errors.response.data.errors[key].forEach(error => this.errors.push(error))
+                        })
+                    }
                 })
             },
             assignUserToData: function() {
