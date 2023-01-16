@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Accounts\UserAccountsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Users\UsersController;
+
+
+use function Symfony\Component\String\b;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +28,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('users')->namespace('Users')->name('users.')->middleware(['web', 'auth'])->group(function () {
     Route::get('/', [UsersController::class, 'index'])->name('dashboard');
+});
+
+Route::prefix('accounts')->namespace('Accounts')->name('accounts.')->middleware(['web', 'auth'])->group(function () {
+    Route::get('/', [UserAccountsController::class, 'index'])->name('dashboard');
 });
 
 Route::prefix('data')->namespace('Data')->middleware(['web', 'auth'])->group(base_path('routes/web/data.php'));

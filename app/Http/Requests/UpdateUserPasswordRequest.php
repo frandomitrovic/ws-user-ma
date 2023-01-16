@@ -27,7 +27,7 @@ class UpdateUserPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'passwords' => [
+            'password' => [
                 'required',
                 'min:10',
                 'regex:/[a-z]/',

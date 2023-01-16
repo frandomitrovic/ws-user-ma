@@ -6,10 +6,9 @@
 
 import './bootstrap';
 import axios from 'axios';
-// import 'fontawesome-free/css/all.min.css';
-// import "./node_modules/font-awesome/scss/font-awesome.scss";
 import { createApp } from 'vue';
-//window.Vue = require('vue');
+import UsersManagementDashboard from './components/users/UsersManagementDashboard.vue';
+import UserAccountSettings from './components/accounts/UserAccountSettings.vue';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -22,8 +21,8 @@ const app = createApp({});
 // import ExampleComponent from './components/ExampleComponent.vue';
 // app.component('example-component', ExampleComponent);
 
-import UsersManagementDashboard from './components/users/UsersManagementDashboard.vue';
 app.component('users-management-dashboard', UsersManagementDashboard);
+app.component('user-account-settings', UserAccountSettings);
 
 /**
  * The following block of code may be used to automatically register your

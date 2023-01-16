@@ -57,7 +57,7 @@
         v-on:user-updated="flashSuccessAndReload">
         </EditUser>
 
-        <ChangeUserPassword v-if="user !== null && active.changePassword" v-bind:user="user" v-on:view-dashboard="setActive('dashboard')" v-on:updated-password="flashSuccessAndReload" v-on:sent-reset="flashSuccessAndReload" />
+        <ChangeUserPassword v-if="user !== null && active.changePassword" v-bind:user="user" v-on:view-dashboard="setActive('dashboard')" v-on:updated-password="flashSuccessAndReload" v-on:sent-reset-link="flashSuccessAndReload" />
     </div>
 </template>
 
