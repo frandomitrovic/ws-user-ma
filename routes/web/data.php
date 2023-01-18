@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Data\Accounts\Updates\EmailUpdatesController;
+use App\Http\Controllers\Data\Accounts\Updates\NameUpdatesController;
 use App\Http\Controllers\Data\Accounts\UserAccountController;
 use App\Http\Controllers\Data\Users\Logs\UserLogsController;
 use App\Http\Controllers\Data\Users\Updates\UpdatePasswordsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Data\Users\UsersController;
+
 
 /*
 * prefix: data
@@ -13,6 +16,11 @@ use App\Http\Controllers\Data\Users\UsersController;
 
 Route::prefix('accounts')->namespace('Accounts')->group(function () {
     Route::get('user/{user?}', [UserAccountController::class, 'index']);
+
+    Route::prefix('updates')->namespace('Updates')->group(function () {
+        Route::put('email/{user}', [EmailUpdatesController::class, 'update']);
+        Route::put('name/{user}', [NameUpdatesController::class, 'update']);
+    });
 });
 
 
